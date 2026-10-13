@@ -614,7 +614,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 }
 </script>
 <style>body.guide-modal-open #writtenGuideOpen,body.guide-modal-open #writtenGuideOpen:hover,body.guide-modal-open #writtenGuideOpen:focus,body.guide-modal-open #writtenGuideOpen:active{box-shadow:none!important;filter:none!important;outline:none!important;transform:none!important}</style><style>/* GUIDE-TAP-HIGHLIGHT-FIX: 버튼 터치 잔상 방지 */
-#prices [data-guide-open],#writtenGuideOpen,.guide-modal-confirm{
+#prices [data-guide-open],#writtenGuideOpen,.guide-modal-confirm,#prices .guide-final-open{
   -webkit-tap-highlight-color:transparent;
   -webkit-touch-callout:none;
   user-select:none;
@@ -1329,7 +1329,7 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
  const realtimePanel=document.getElementById('realtimeGuideCheck');
  const realtimeLabel=realtimePanel.querySelector('.guide-check-label');
  const bottom=document.createElement('div');bottom.className='guide-confirm-bottom';bottom.id='guideConfirmBottom';
- const openBtn=document.createElement('button');openBtn.type='button';openBtn.className='guide-link';openBtn.textContent='상담 이용 안내 확인하기 ↗';
+ const openBtn=document.createElement('button');openBtn.type='button';openBtn.className='guide-link guide-final-open';openBtn.textContent='상담 이용 안내 확인하기 ↗';
  const hint=document.createElement('p');hint.className='guide-action-hint';hint.id='guideActionHint';hint.setAttribute('role','status');hint.setAttribute('aria-live','polite');
  const letterLabel=document.querySelector('#letterGuideCheck .guide-check-label');
  [document.getElementById('realtimeAgreement'),document.getElementById('letterAgreement')].forEach(cb=>{cb.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();});cb.tabIndex=-1;cb.setAttribute('aria-readonly','true');});
