@@ -663,14 +663,14 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 /* GUIDE MENU ATTENTION: only the small pink rays blink, not the menu button. */
 .mobile-menu-toggle{position:relative}
 .guide-menu-rays{position:absolute;left:-17px;bottom:-15px;width:34px;height:30px;pointer-events:none;display:none;transform:rotate(180deg)}
-.guide-menu-rays i{position:absolute;display:block;width:5px;height:13px;border-radius:9px;background:#ff4fd8;box-shadow:0 0 7px #ff4fd899;opacity:0;animation:guideRayBlink 2.7s ease-in-out infinite}
+.guide-menu-rays i{position:absolute;display:block;width:5px;height:13px;border-radius:9px;background:#4DAFFF;box-shadow:0 0 7px #4DAFFF99;opacity:0;animation:guideRayBlink 2.7s ease-in-out infinite}
 .guide-menu-rays i:nth-child(1){left:5px;top:2px;transform:rotate(-22deg)}
 .guide-menu-rays i:nth-child(2){left:18px;top:1px;transform:rotate(28deg)}
 .guide-menu-rays i:nth-child(3){left:27px;top:15px;height:11px;transform:rotate(73deg)}
 @keyframes guideRayBlink{0%,15%,42%,100%{opacity:0}20%,32%{opacity:1}}
 .guide-more-note{text-align:center;margin:24px 0 12px;color:#e8d5e3;font-size:13px;line-height:1.8}
-.guide-more-note strong{color:#ff80e2}
-@media(max-width:720px){body.mobile-page-mode[data-mobile-view="about"]:not(.guide-menu-used) .mobile-menu-toggle[aria-expanded="false"] .guide-menu-rays{display:block}}
+.guide-more-note strong{color:#75C7FF}
+@media(max-width:720px){body.mobile-page-mode[data-mobile-view="about"].guide-more-finished:not(.guide-menu-used) .mobile-menu-toggle[aria-expanded="false"] .guide-menu-rays{display:block}}
 @media(prefers-reduced-motion:reduce){.guide-menu-rays i{animation:none;opacity:1}}
 </style>
 <style>
@@ -1337,6 +1337,9 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
   const hasMore=mq.matches&&body.classList.contains('mobile-page-mode')&&contentBottom>window.innerHeight+125;
   scrollHint.classList.toggle('visible',hasMore);
   scrollHint.setAttribute('aria-hidden',String(!hasMore));
+  // 이용 안내에서 MORE가 사라지고 실제로 아래까지 읽었을 때만 메뉴 강조.
+  const guideFinished=mq.matches&&view==='about'&&body.classList.contains('mobile-page-mode')&&!hasMore&&window.scrollY>120;
+  body.classList.toggle('guide-more-finished',guideFinished);
  }
  function queueScrollHint(){if(!hintFrame)hintFrame=requestAnimationFrame(updateScrollHint);}
  window.addEventListener('scroll',queueScrollHint,{passive:true});
