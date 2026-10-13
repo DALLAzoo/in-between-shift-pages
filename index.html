@@ -866,7 +866,7 @@ function syncConsultProgress(){
  const screen=$('realtimeScreen');const letter=$('letterScreen');
  const realtime=!screen.hidden, nonRealtime=!letter.hidden;
  const method=Boolean($('orderMethod').value);
- const datetime=Boolean(rateDate.value&&rateTime.value.trim()&&previewBand);
+ const datetime=Boolean(rateDate.value&&rateTime.value.trim()&&previewBand&&!(typeof holidayDateBlocked==='function'&&holidayDateBlocked(rateDate.value))&&!(typeof indicator!=='undefined'&&['blocked','error','loading'].includes(indicator.dataset.state)));
  const duration=Boolean(order&&order.type==='realtime');
  const packageSelected=Boolean(order&&order.type==='letter');
  const payment=Boolean($('orderPayment').value);
@@ -1339,6 +1339,7 @@ document.querySelectorAll('.realtime-duration-button[data-duration-select]').for
 });
 const realtimeSelected=document.querySelector('.realtime-duration-button.chosen');
 const go=$r('orderGo');if(go&&realtimeSelected&&state!=='free')go.disabled=true;
+requestAnimationFrame(syncConsultProgress);
 renderAdminList();}
 function renderAdminList(){const list=$r('raList');if(!list)return;list.replaceChildren();if(!currentUser)return;
 blocks.slice().sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).forEach(b=>{const li=document.createElement('li'),label=document.createElement('span'),del=document.createElement('button');label.textContent=`${b.date} ${b.start}–${b.end}`;del.textContent='삭제';del.type='button';del.addEventListener('click',async()=>{if(!confirm('이 예약 시간을 삭제할까요?'))return;try{await deleteDoc(doc(db,'blockedReservations',b.id));$r('raStatus').textContent='삭제했습니다.'}catch(e){$r('raStatus').textContent='삭제 실패: '+e.message}});li.append(label,del);list.append(li)})}
