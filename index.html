@@ -664,7 +664,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 .mobile-menu-toggle{position:relative;isolation:isolate}
 .guide-menu-rays{display:none!important}
 @media(max-width:720px){
-body.mobile-page-mode[data-mobile-view="about"].guide-more-finished:not(.guide-menu-used) .mobile-menu-toggle[aria-expanded="false"]::after{
+body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
  content:"";position:absolute;inset:-3px;border-radius:14px;pointer-events:none;
  border:2px solid transparent;
  background:linear-gradient(#242128,#242128) padding-box,conic-gradient(from var(--guide-angle,0deg),transparent 0deg,transparent 265deg,#52d5d0 305deg,#b8f6ef 327deg,transparent 355deg) border-box;
