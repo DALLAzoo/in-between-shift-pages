@@ -846,8 +846,22 @@ document.querySelectorAll('[data-clear-mode]').forEach(b=>b.addEventListener('cl
 
 let order=null;refreshRatePreview();const orderMethod=$('orderMethod'),orderWritten=$('orderWritten'),orderPayment=$('orderPayment');
 // 상담 방식은 상단에서 한 번만 고르며 기존 결제 계산은 숨겨진 선택값을 그대로 사용합니다.
-function syncRealtimeMethodButtons(){document.querySelectorAll('[data-realtime-method]').forEach(btn=>{const active=btn.dataset.realtimeMethod===orderMethod.value;btn.classList.toggle('selected',active);btn.setAttribute('aria-pressed',String(active))})}
+function syncRealtimeMethodButtons(){
+ const methodChosen=orderMethod.value==='채팅'||orderMethod.value==='보이스톡';
+ document.querySelectorAll('[data-realtime-method]').forEach(btn=>{
+  const active=btn.dataset.realtimeMethod===orderMethod.value;
+  btn.classList.toggle('selected',active);btn.setAttribute('aria-pressed',String(active));
+ });
+ // 상담 방식 선택 전에는 날짜와 시작 시간 입력을 비활성화합니다.
+ ['rateDate','rateTime'].forEach(id=>{
+  const input=$(id);if(!input)return;
+  input.disabled=!methodChosen;
+  input.setAttribute('aria-disabled',String(!methodChosen));
+ });
+}
 document.querySelectorAll('[data-realtime-method]').forEach(btn=>btn.addEventListener('click',()=>{orderMethod.value=btn.dataset.realtimeMethod;syncRealtimeMethodButtons();updateOrder()}));
+// 초기 상태에서도 상담 방식을 선택하기 전까지 날짜 입력을 잠급니다.
+syncRealtimeMethodButtons();
 // SECTION: CONSULT-PROGRESS-DATE-TIME-SCROLL | 상담 방식 → 날짜 → 시작 시간 → 상담 시간으로 화면 이동
 function scrollToConsultStep(id){
  if(id==='realtimeDurationStep' && (document.getElementById('reservationAvailability')?.dataset.state!=='free' || (typeof window.tarotHolidayDateBlocked==='function'&&window.tarotHolidayDateBlocked(rateDate.value))))return;
