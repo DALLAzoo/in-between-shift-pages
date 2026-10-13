@@ -1327,6 +1327,16 @@ else if(x.end>1440){message='자정을 넘는 상담은 별도 문의해 주세�
 else if(overlap(x.date,x.start,x.end)){message='선택한 시간에 이미 예약이 있습니다. 다른 시간을 선택해 주세요.';state='blocked'}
 else{message='예약 가능한 날짜와 시간대입니다.';state='free'}
 indicator.textContent=message;indicator.dataset.state=state;
+// 예약 가능 여부와 상담 시간 버튼의 활성 상태를 함께 갱신합니다.
+// 상담 길이마다 예약 중복 여부를 따로 계산합니다.
+const validStart=Number.isFinite(x.start)&&x.start>=0&&x.start<1440;
+document.querySelectorAll('.realtime-duration-button[data-duration-select]').forEach(btn=>{
+ const duration=btn.dataset.durationSelect==='1시간'?60:10;
+ const timeAllowed=duration===60||(typeof tenMinuteAvailable==='function'&&tenMinuteAvailable(bandForDateTime(),timeInput.value.trim()));
+ const canChoose=intakeAllowed('realtime')&&!holidayDateBlocked(x.date)&&loaded&&!liveError&&!!x.date&&validStart&&x.start+duration<=1440&&timeAllowed&&!overlap(x.date,x.start,x.start+duration);
+ btn.disabled=!canChoose;
+ if(!canChoose){btn.classList.remove('chosen');btn.setAttribute('aria-pressed','false');}
+});
 const realtimeSelected=document.querySelector('.realtime-duration-button.chosen');
 const go=$r('orderGo');if(go&&realtimeSelected&&state!=='free')go.disabled=true;
 renderAdminList();}
