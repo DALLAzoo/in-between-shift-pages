@@ -1648,4 +1648,49 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #siteStatus .ss-alert {font-size:9px !important}
 }
 </style>
-</body></html>
+<style id="ssStableAlignmentPatch">
+/* 상태 문구 길이와 무관하게 각 행의 시작 위치를 고정 */
+#siteStatus .ss-status-card {
+ display:grid !important;
+ grid-template-columns: 105px minmax(0,1fr) !important;
+ column-gap:6px !important;
+ align-items:center !important;
+ justify-content:initial !important;
+ flex-wrap:initial !important;
+ width:100% !important;
+}
+#siteStatus .ss-status-name {grid-column:1 !important;min-width:0 !important;}
+#siteStatus .ss-status-card .ss-badges {
+ grid-column:2 !important;
+ display:grid !important;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+ gap:5px !important;
+ align-items:center !important;
+ width:100% !important;
+}
+#siteStatus .ss-status-card .ss-pill {
+ display:block !important;
+ text-align:left !important;
+ width:100% !important;
+ min-width:0 !important;
+ white-space:normal !important;
+ overflow-wrap:normal !important;
+ word-break:keep-all !important;
+}
+#siteStatus .ss-status-grid {gap:14px !important;}
+/* 휴무 안내가 없을 때 빈 행을 남기지 않음 */
+#siteStatus .ss-holiday-summary[hidden] {display:none !important;}
+#siteStatus .ss-static-summary:has(.ss-holiday-summary[hidden]) .ss-status-grid,
+#siteStatus .ss-static-summary:has(.ss-holiday-summary[hidden]) .ss-alert-row {grid-row:2 !important;}
+@media(max-width:390px) {
+ #siteStatus .ss-static-summary {grid-template-columns:minmax(0,1fr) 96px !important;column-gap:7px !important;}
+ #siteStatus .ss-status-card {grid-template-columns:96px minmax(0,1fr) !important;column-gap:4px !important;}
+ #siteStatus .ss-status-name {font-size:10px !important;letter-spacing:-.35px !important;}
+ #siteStatus .ss-status-card .ss-pill {font-size:10px !important;letter-spacing:-.35px !important;}
+}
+@media(max-width:340px) {
+ #siteStatus .ss-static-summary {grid-template-columns:minmax(0,1fr) 84px !important;column-gap:5px !important;}
+ #siteStatus .ss-status-card {grid-template-columns:88px minmax(0,1fr) !important;column-gap:3px !important;}
+ #siteStatus .ss-status-name,#siteStatus .ss-status-card .ss-pill {font-size:9px !important;}
+}
+</style></body></html>
