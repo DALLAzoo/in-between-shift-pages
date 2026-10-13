@@ -993,6 +993,13 @@ body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
   overflow:visible !important;
 }
 </style>
+<style id="ssStatusColumnWidthFix20261014">
+/* Give the two status values more width without moving the alert button. */
+#siteStatus .ss-status-card{grid-template-columns:minmax(0,34%) minmax(0,66%) !important;column-gap:0 !important}
+#siteStatus .ss-status-card .ss-badges{gap:2px !important}
+#siteStatus .ss-status-card .ss-pill{font-size:clamp(9px,2.2vw,10px) !important;letter-spacing:-.45px !important;overflow-wrap:normal !important;word-break:keep-all !important}
+@media(max-width:370px){#siteStatus .ss-status-card{grid-template-columns:minmax(0,32%) minmax(0,68%) !important}#siteStatus .ss-status-card .ss-badges{gap:2px !important}}
+</style>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
