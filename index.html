@@ -556,6 +556,11 @@ body.guide-modal-open{overflow:hidden}
   outline-offset:2px;
 }
 </style>
+
+<style>/* 휴무일 선택 시 상담 방식 변경과 무관하게 상담 시간 선택 강조 제거 */
+body.consult-holiday-date-blocked #prices #realtimeDurationStep,
+body.consult-holiday-date-blocked #prices #realtimeDurationStep.progress-current{border-color:#49434d!important;box-shadow:none!important;animation:none!important;}
+</style>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
@@ -883,6 +888,13 @@ function syncConsultProgress(){
   el.classList.toggle('progress-current',i===active);
   el.classList.toggle('progress-done',i<active&&done);
  });
+ // 상담 방식 변경 후에도 휴무일 예약 불가 상태를 최우선으로 유지
+ const blockedHoliday=typeof holidayDateBlocked==='function'&&holidayDateBlocked(rateDate.value);
+ document.body.classList.toggle('consult-holiday-date-blocked',Boolean(realtime&&blockedHoliday));
+ if(blockedHoliday){
+  const durationBox=$('realtimeDurationStep');
+  if(durationBox){durationBox.classList.remove('progress-current','progress-done');}
+ }
 }
 ['click','change','input'].forEach(eventName=>$('realtimeScreen').addEventListener(eventName,()=>requestAnimationFrame(syncConsultProgress)));
 $('orderPayment').addEventListener('change',()=>requestAnimationFrame(syncConsultProgress));
