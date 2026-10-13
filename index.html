@@ -660,18 +660,22 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 @media(max-width:380px){#prices .order-price-details{flex-wrap:wrap}#prices .order-price-details span:last-child{margin-left:auto}}
 </style>
 <style>
-/* GUIDE MENU ATTENTION: only the small pink rays blink, not the menu button. */
-.mobile-menu-toggle{position:relative}
-.guide-menu-rays{position:absolute;left:-17px;bottom:-15px;width:34px;height:30px;pointer-events:none;display:none;transform:rotate(180deg)}
-.guide-menu-rays i{position:absolute;display:block;width:5px;height:13px;border-radius:9px;background:#4DAFFF;box-shadow:0 0 7px #4DAFFF99;opacity:0;animation:guideRayBlink 2.7s ease-in-out infinite}
-.guide-menu-rays i:nth-child(1){left:5px;top:2px;transform:rotate(-22deg)}
-.guide-menu-rays i:nth-child(2){left:18px;top:1px;transform:rotate(28deg)}
-.guide-menu-rays i:nth-child(3){left:27px;top:15px;height:11px;transform:rotate(73deg)}
-@keyframes guideRayBlink{0%,15%,42%,100%{opacity:0}20%,32%{opacity:1}}
+/* Only guide page, after MORE has appeared and then disappeared. */
+.mobile-menu-toggle{position:relative;isolation:isolate}
+.guide-menu-rays{display:none!important}
+@media(max-width:720px){
+body.mobile-page-mode[data-mobile-view="about"].guide-more-finished:not(.guide-menu-used) .mobile-menu-toggle[aria-expanded="false"]::after{
+ content:"";position:absolute;inset:-3px;border-radius:14px;pointer-events:none;
+ border:2px solid transparent;
+ background:linear-gradient(#242128,#242128) padding-box,conic-gradient(from var(--guide-angle,0deg),transparent 0deg,transparent 265deg,#52d5d0 305deg,#b8f6ef 327deg,transparent 355deg) border-box;
+ filter:drop-shadow(0 0 4px #52d5d0);animation:guideBorderOrbit 1.4s linear infinite;
+}
+}
+@property --guide-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes guideBorderOrbit{to{--guide-angle:360deg}}
 .guide-more-note{text-align:center;margin:24px 0 12px;color:#e8d5e3;font-size:13px;line-height:1.8}
 .guide-more-note strong{color:#75C7FF}
-@media(max-width:720px){body.mobile-page-mode[data-mobile-view="about"].guide-more-finished:not(.guide-menu-used) .mobile-menu-toggle[aria-expanded="false"] .guide-menu-rays{display:block}}
-@media(prefers-reduced-motion:reduce){.guide-menu-rays i{animation:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){body .mobile-menu-toggle::after{animation:none!important}}
 </style>
 <style>
 /* Copy button: exactly two intentional lines, never wrap either line */
@@ -1327,6 +1331,7 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
  const body=document.body;
  const scrollHint=document.getElementById('mobileScrollHint');
  let hintFrame=0;
+ let guideSawMore=false;
  function updateScrollHint(){
   hintFrame=0;
   const view=body.dataset.mobileView||'home';
@@ -1338,7 +1343,8 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
   scrollHint.classList.toggle('visible',hasMore);
   scrollHint.setAttribute('aria-hidden',String(!hasMore));
   // 이용 안내에서 MORE가 사라지고 실제로 아래까지 읽었을 때만 메뉴 강조.
-  const guideFinished=mq.matches&&view==='about'&&body.classList.contains('mobile-page-mode')&&!hasMore&&window.scrollY>120;
+  if(view==='about'&&hasMore)guideSawMore=true;
+  const guideFinished=mq.matches&&view==='about'&&body.classList.contains('mobile-page-mode')&&guideSawMore&&!hasMore&&window.scrollY>120;
   body.classList.toggle('guide-more-finished',guideFinished);
  }
  function queueScrollHint(){if(!hintFrame)hintFrame=requestAnimationFrame(updateScrollHint);}
@@ -1354,6 +1360,7 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
  }
  function show(view,scroll=true){
   if(!views.includes(view))view='home';
+  if(body.dataset.mobileView!==view){guideSawMore=false;body.classList.remove('guide-more-finished','guide-menu-used');}
   body.dataset.mobileView=view;
   if(scroll)window.scrollTo({top:0,behavior:'instant'});
   queueScrollHint();
@@ -1361,7 +1368,7 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
  }
  function sync(){
   if(mq.matches){body.classList.add('mobile-page-mode');show(viewFromHash(),true);}
-  else{body.classList.remove('mobile-page-mode');body.removeAttribute('data-mobile-view');}
+  else{body.classList.remove('mobile-page-mode','guide-more-finished');body.removeAttribute('data-mobile-view');}
   queueScrollHint();
  }
  document.addEventListener('click',function(e){
