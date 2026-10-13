@@ -871,7 +871,7 @@ body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
 /* 시안 기준: 상태 종류/문구 길이에 관계없이 2개 행과 3개 열을 유지 */
 #siteStatus .ss-static-summary {
   display:grid !important;
-  grid-template-columns:minmax(0,1fr) clamp(82px,23%,112px) !important;
+  grid-template-columns:minmax(0,1fr) clamp(70px,20%,96px) !important;
   gap:0 10px !important;
   align-items:stretch !important;
 }
@@ -959,7 +959,7 @@ body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
   width:100% !important;
   min-width:0 !important;
   border-radius:6px !important;
-  padding:8px 5px !important;
+  padding:7px 3px !important;
   font-size:clamp(9px,2.3vw,11px) !important;
   line-height:1.45 !important;
   word-break:keep-all !important;
@@ -970,7 +970,7 @@ body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
   grid-row:3 !important;
 }
 @media(max-width:370px) {
-  #siteStatus .ss-static-summary {grid-template-columns:minmax(0,1fr) 78px !important;column-gap:5px !important}
+  #siteStatus .ss-static-summary {grid-template-columns:minmax(0,1fr) 68px !important;column-gap:5px !important}
   #siteStatus .ss-status-card {grid-template-columns:minmax(0,40%) minmax(0,60%) !important}
   #siteStatus .ss-status-card .ss-badges {gap:3px !important}
   #siteStatus .ss-alert-row {padding-left:4px !important}
@@ -999,6 +999,12 @@ body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
 #siteStatus .ss-status-card .ss-badges{gap:2px !important}
 #siteStatus .ss-status-card .ss-pill{font-size:clamp(9px,2.2vw,10px) !important;letter-spacing:-.45px !important;overflow-wrap:normal !important;word-break:keep-all !important}
 @media(max-width:370px){#siteStatus .ss-status-card{grid-template-columns:minmax(0,32%) minmax(0,68%) !important}#siteStatus .ss-status-card .ss-badges{gap:2px !important}}
+</style>
+<style id="ssAlertVisualShrink20261014">
+/* Smaller notification button while keeping its tap target accessible. */
+#siteStatus .ss-alert {min-height:48px !important;}
+#siteStatus .ss-bell-icon {width:26px !important;height:26px !important;}
+#siteStatus .ss-alert-label {font-size:clamp(9px,2.25vw,11px) !important;line-height:1.4 !important;}
 </style>
 </head><body>
 
