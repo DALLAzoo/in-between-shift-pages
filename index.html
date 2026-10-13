@@ -816,10 +816,14 @@ function resetConsultSelection(mode){
     document.querySelectorAll('.realtime-duration-button,.letter-price-choice').forEach(b=>{b.classList.remove('chosen');b.setAttribute('aria-pressed','false')});
     $('orderOptions').hidden=true;$('orderFinal').hidden=true;$('inlineOrder').hidden=true;
     $('orderSelection').textContent='상담을 선택해 주세요.';
-    orderMethod.value='';orderPayment.value='';orderWritten.checked=false;syncRealtimeMethodButtons();
+    orderPayment.value='';orderWritten.checked=false;
   }
-  if(mode==='realtime'){
-    rateDate.value='';rateTime.value='';refreshRatePreview();
+  if(mode==='realtime' || !mode){
+    // Clear method independently of whether a paid consultation was selected.
+    orderMethod.value='';
+    rateDate.value='';rateTime.value='';
+    syncRealtimeMethodButtons();
+    refreshRatePreview();
   }
 }
 function openConsultScreen(mode){
