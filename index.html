@@ -561,6 +561,20 @@ body.guide-modal-open{overflow:hidden}
 body.consult-holiday-date-blocked #prices #realtimeDurationStep,
 body.consult-holiday-date-blocked #prices #realtimeDurationStep.progress-current{border-color:#49434d!important;box-shadow:none!important;animation:none!important;}
 </style>
+<style>
+/* 예약 불가 상태는 진행 강조보다 우선: 휴무일, 기존 예약, 조회 오류 */
+#prices:has(#reservationAvailability[data-state="blocked"]) #realtimeDurationStep,
+#prices:has(#reservationAvailability[data-state="error"]) #realtimeDurationStep,
+#prices:has(#realtimeDurationStep .realtime-duration-button:disabled + .realtime-duration-button:disabled) #realtimeDurationStep,
+body.consult-reservation-unavailable #prices #realtimeDurationStep,
+body.consult-reservation-unavailable #prices #realtimeDurationStep.progress-current {
+  border:1px solid #49434d!important;
+  box-shadow:none!important;
+  animation:none!important;
+}
+/* 안내 문장은 모바일에서 자연스럽게 여러 줄로 표시 */
+#prices #reservationAvailability{white-space:normal;overflow-wrap:break-word;word-break:keep-all;line-height:1.65;}
+</style>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
@@ -889,6 +903,12 @@ function syncConsultProgress(){
   el.classList.toggle('progress-done',i<active&&done);
  });
  // 상담 방식 변경 후에도 휴무일 예약 불가 상태를 최우선으로 유지
+ const availabilityState=$('reservationAvailability')?.dataset.state;
+ const durationButtons=[...document.querySelectorAll('#realtimeDurationStep .realtime-duration-button')];
+ const noAvailableDuration=durationButtons.length>0&&durationButtons.every(button=>button.disabled);
+ const reservationUnavailable=Boolean(realtime&&(availabilityState==='blocked'||availabilityState==='error'||noAvailableDuration));
+ document.body.classList.toggle('consult-reservation-unavailable',reservationUnavailable);
+ if(reservationUnavailable){const box=$('realtimeDurationStep');if(box)box.classList.remove('progress-current','progress-done');}
  const blockedHoliday=typeof holidayDateBlocked==='function'&&holidayDateBlocked(rateDate.value);
  document.body.classList.toggle('consult-holiday-date-blocked',Boolean(realtime&&blockedHoliday));
  if(blockedHoliday){
