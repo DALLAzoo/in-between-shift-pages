@@ -192,13 +192,14 @@
 /* v4.2: 모바일은 선택한 화면만 보여주는 페이지 전환 방식 */
 @media(max-width:720px){
  body.mobile-page-mode #home,body.mobile-page-mode #intro,body.mobile-page-mode #services,body.mobile-page-mode #prices,
- body.mobile-page-mode #tarot,body.mobile-page-mode #ledger,body.mobile-page-mode #about{display:none!important}
+ body.mobile-page-mode #tarot,body.mobile-page-mode #ledger,body.mobile-page-mode #customerLedger,body.mobile-page-mode #about{display:none!important}
  body.mobile-page-mode[data-mobile-view="home"] #home,
  body.mobile-page-mode[data-mobile-view="home"] #intro,
  body.mobile-page-mode[data-mobile-view="home"] #services,
  body.mobile-page-mode[data-mobile-view="prices"] #prices,
  body.mobile-page-mode[data-mobile-view="tarot"] #tarot,
  body.mobile-page-mode[data-mobile-view="ledger"] #ledger,
+  body.mobile-page-mode[data-mobile-view="customerLedger"] #customerLedger,
  body.mobile-page-mode[data-mobile-view="about"] #about{display:block!important}
  body.mobile-page-mode .footer{margin-top:0}
 }
@@ -647,7 +648,18 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 </style><style>
 /* V9: 상담 카드 사진 안내 아이콘만 추가 */
 #prices .realtime-card-photo-note{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0 6px;text-align:left} #prices .realtime-card-photo-icon{display:inline-flex;align-items:center;justify-content:center;flex:none;width:43px;height:37px;color:#9edacb;line-height:0} #prices .realtime-card-photo-note>span:last-child{display:block;line-height:1.55}
-</style></head><body>
+</style><style>
+/* CONSULT-PRICE-SUMMARY */
+#prices #orderSelection{padding:16px 18px}
+#prices .order-price-details{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;color:#d7c9b7;font-size:12px;line-height:1.65}
+#prices .order-price-details span:last-child{text-align:right;flex-shrink:0}
+#prices .order-price-total{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #6b6047;color:#ffe46d;font-size:14px;font-weight:700}
+#prices .order-price-total strong{font-size:21px}
+#prices #orderGo{white-space:normal;line-height:1.55}
+#customerLedger .panel p{line-height:1.8}
+@media(max-width:380px){#prices .order-price-details{flex-wrap:wrap}#prices .order-price-details span:last-child{margin-left:auto}}
+</style>
+</head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
 <div class="mobile-scroll-hint" id="mobileScrollHint" aria-hidden="true"><span class="more-triangle"><span class="more-label">MORE</span></span></div>
@@ -656,7 +668,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 
 <!-- SECTION: TOC-UI | 화면 내 수정 목차 -->
 <details id="sourceToc" style="position:relative;z-index:31;margin:8px auto;max-width:1060px;padding:10px 16px;border:1px solid #ffffff33;border-radius:12px;color:#f7f2f6;background:#29252e;font-size:12px"><summary style="cursor:pointer;font-weight:700">🛠 HTML 수정 목차 · 소스 줄 번호</summary><p style="opacity:.75">줄 번호는 HTML 파일 원본 기준입니다. 수정 후 함께 제공한 build_tarot_toc.py를 실행하면 갱신됩니다. 웹서버에서 열면 줄 번호를 자동으로 확인합니다.</p><ol id="sourceTocList"></ol></details>
-<header class="header"><div class="wrap header-in"><a class="logo" href="#home">In-between <i>Shift ✦</i></a><button class="mobile-menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="siteNav"><span></span><span></span><span></span></button><nav class="nav" id="siteNav" hidden><a href="#prices">상담 가격에서 선택하기 ↗</a><a href="#tarot">무료 1장 타로</a><a href="#about">이용 안내</a><a href="#ledger">고객 장부</a></nav></div></header>
+<header class="header"><div class="wrap header-in"><a class="logo" href="#home">In-between <i>Shift ✦</i></a><button class="mobile-menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="siteNav"><span></span><span></span><span></span></button><nav class="nav" id="siteNav" hidden><a href="#prices">상담 가격에서 선택하기 ↗</a><a href="#tarot">무료 1장 타로</a><a href="#about">이용 안내</a><a href="#customerLedger">고객 장부</a><a href="#ledger">관리자 장부</a></nav></div></header>
 
 
 <!-- SECTION: HERO | 첫 화면과 대표 이미지 -->
@@ -692,7 +704,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 <button class="letter-price-choice" data-letter-product="three2" type="button" aria-pressed="false"><span class="letter-product-line"><strong>3장 타로 · 심플 타로</strong><b class="letter-product-price">10,000원</b></span><span class="letter-product-line letter-product-desc"><small>근본 · 결과 · 문제점 조합</small><em>2건 묶음</em></span><small class="letter-product-limit">기간 · 시점 · 정도 측정 질문 의뢰 X</small></button>
 <button class="letter-price-choice" data-letter-product="choice1" type="button" aria-pressed="false"><span class="letter-product-line"><strong>양자택일 타로 · A/B 선택의 순간</strong><b class="letter-product-price">10,000원</b></span><span class="letter-product-line letter-product-desc"><small>과정과 결과 조합</small><em>1건</em></span><small class="letter-product-limit">기간 · 시점 · 정도 측정 질문 의뢰 X</small></button>
 <button class="letter-price-choice" data-letter-product="celtic1" type="button" aria-pressed="false"><span class="letter-product-line"><strong>10장 타로 · 심화 타로</strong><b class="letter-product-price">20,000원</b></span><span class="letter-product-line letter-product-desc"><small>다층적 분석 · 내부와 외부의 차이 · 깊이 · 농도 조합</small><em>1건</em></span></button>
-</div></article><div class="guide-check-panel" id="letterGuideCheck"><span class="guide-check-caption">2. 상담 이용 안내</span><a class="guide-link" href="#about" data-guide-open="letter">이용 안내 보기 ↗</a><label class="guide-check-label"><input type="checkbox" id="letterAgreement"/><span>안내 사항을 읽고 확인했습니다.</span></label></div><div id="letterOrderSlot"></div><button type="button" class="consult-to-top">↑ 맨 위로 가기</button></div><div class="notice" id="consultCommonNotice" hidden style="margin-top:18px">✦ 모든 상담에 해당 질문을 간단히 기록한 카드 사진을 제공합니다. 결제 수단은 카카오 상품권 또는 쿠팡 쿠폰이며, 관리자가 결제를 확정하면 장부에 결제 내역과 룰렛 이용권이 반영됩니다. 상담 후 차감 내역과 남은 금액·포인트는 장부에서 확인할 수 있습니다.</div><p class="note" id="consultPrototypeNote" hidden>현재 이 시제품에는 온라인 결제나 자동 예약 접수 기능이 없습니다.</p><div class="glass panel" id="inlineOrder" style="margin-top:22px" hidden><div class="mini">CONSULTATION REQUEST</div><h3>선택한 상담</h3><div hidden="" id="writtenWrap" style="margin:14px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:8px;min-width:0"><input id="orderWritten" style="accent-color:#69cbb7" type="checkbox"/>상담 리딩 서면 해석 (선택)</label><button type="button" id="writtenGuideOpen" class="guide-link" style="margin:0;flex-shrink:0;color:#e9ef8a">이용 안내 보기 ↗</button></div></div><div class="notice" id="orderSelection" style="white-space:pre-line;line-height:1.8">상담을 선택해 주세요.</div><div hidden="" id="orderOptions"><div id="methodWrap" hidden><label class="field" for="orderMethod">상담 방식</label><select id="orderMethod"><option value="">상담 방식을 선택해 주세요</option><option value="채팅">실시간 채팅</option><option value="보이스톡">실시간 보이스톡</option></select></div><div class="consult-progress-box compact-progress" id="paymentStep"><label class="field" for="orderPayment">결제 희망 수단</label><div class="payment-choice-group" id="paymentDropdown" role="group" aria-label="결제 희망 수단"><select id="orderPayment" class="payment-native-select" tabindex="-1" aria-hidden="true"><option value="">결제 수단을 선택해 주세요</option><option value="카카오 상품권">카카오 상품권</option><option value="쿠팡 쿠폰">쿠팡 쿠폰</option></select><button type="button" class="payment-choice-button" data-payment-value="카카오 상품권" aria-pressed="false">카카오 상품권</button><button type="button" class="payment-choice-button" data-payment-value="쿠팡 쿠폰" aria-pressed="false">쿠팡 쿠폰</button></div></div><div class="notice" id="orderTotal" hidden aria-live="polite" style="margin-top:10px"></div><div hidden="" id="orderFinal" class="consult-progress-box order-final-step" style="margin-top:20px"><label class="field">상담 신청 확인</label><div class="notice" id="orderSummary" hidden style="white-space:pre-wrap;line-height:1.8"></div><div class="copy-progress" id="copyStep"><button class="btn btn-main" id="orderGo" type="button">신청 내용과 안내 복사 후 카카오톡 이동 ↗</button></div><p class="note">복사 후 카카오톡에서 붙여넣어 보내주세요. 복사만으로 예약이나 결제가 완료되지 않습니다.</p></div></div></div></section>
+</div></article><div class="guide-check-panel" id="letterGuideCheck"><span class="guide-check-caption">2. 상담 이용 안내</span><a class="guide-link" href="#about" data-guide-open="letter">이용 안내 보기 ↗</a><label class="guide-check-label"><input type="checkbox" id="letterAgreement"/><span>안내 사항을 읽고 확인했습니다.</span></label></div><div id="letterOrderSlot"></div><button type="button" class="consult-to-top">↑ 맨 위로 가기</button></div><div class="notice" id="consultCommonNotice" hidden style="margin-top:18px"></div><p class="note" id="consultPrototypeNote" hidden>현재 이 시제품에는 온라인 결제나 자동 예약 접수 기능이 없습니다.</p><div class="glass panel" id="inlineOrder" style="margin-top:22px" hidden><div class="mini">CONSULTATION REQUEST</div><h3>선택한 상담</h3><div hidden="" id="writtenWrap" style="margin:14px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:8px;min-width:0"><input id="orderWritten" style="accent-color:#69cbb7" type="checkbox"/>상담 리딩 서면 해석 (선택)</label><button type="button" id="writtenGuideOpen" class="guide-link" style="margin:0;flex-shrink:0;color:#e9ef8a">이용 안내 보기 ↗</button></div></div><div class="notice" id="orderSelection" style="white-space:pre-line;line-height:1.8">상담을 선택해 주세요.</div><div hidden="" id="orderOptions"><div id="methodWrap" hidden><label class="field" for="orderMethod">상담 방식</label><select id="orderMethod"><option value="">상담 방식을 선택해 주세요</option><option value="채팅">실시간 채팅</option><option value="보이스톡">실시간 보이스톡</option></select></div><div class="consult-progress-box compact-progress" id="paymentStep"><label class="field" for="orderPayment">결제 희망 수단</label><div class="payment-choice-group" id="paymentDropdown" role="group" aria-label="결제 희망 수단"><select id="orderPayment" class="payment-native-select" tabindex="-1" aria-hidden="true"><option value="">결제 수단을 선택해 주세요</option><option value="카카오 상품권">카카오 상품권</option><option value="쿠팡 쿠폰">쿠팡 쿠폰</option></select><button type="button" class="payment-choice-button" data-payment-value="카카오 상품권" aria-pressed="false">카카오 상품권</button><button type="button" class="payment-choice-button" data-payment-value="쿠팡 쿠폰" aria-pressed="false">쿠팡 쿠폰</button></div></div><div hidden="" id="orderFinal" class="consult-progress-box order-final-step" style="margin-top:20px"><label class="field">상담 신청 확인</label><div class="notice" id="orderSummary" hidden style="white-space:pre-wrap;line-height:1.8"></div><div class="copy-progress" id="copyStep"><button class="btn btn-main" id="orderGo" type="button">신청 내용과 안내 복사 후<br>카카오톡 이동 ↗</button></div><p class="note">복사 후 카카오톡에서 붙여넣어 보내주세요. 복사만으로 예약이나 결제가 완료되지 않습니다.</p></div></div></div></section>
 
 
 <style>
@@ -738,6 +750,8 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 <!-- SECTION: TAROT | 무료 한 장 타로 -->
 <section class="section wrap" id="tarot"><div class="kicker">ONE CARD EXPERIENCE</div><h2>무료 1장 타로</h2><p class="muted">질문을 떠올리고 자리를 선택한 다음 카드를 뽑아보세요.</p><div class="notice">현재는 디자인과 이용 흐름을 확인하는 체험판입니다. 검증된 5개 사례만 제공합니다. AI 연결이나 새로운 질문의 자동 해석은 없습니다.</div><div class="glass panel"><label class="field" for="tarotQuestion">나의 질문</label><textarea id="tarotQuestion" placeholder="궁금한 내용을 적어 주세요."></textarea><label class="field">어떤 관점에서 살펴볼까요?</label><div class="tabs" id="positions"></div><label class="field">카드 한 장 뽑기</label><button class="cardpick" id="drawCard" type="button">✦   TOUCH TO REVEAL   ✦</button><div aria-live="polite" class="cardreveal" id="revealed"></div><p class="hint">현재는 검증된 카드 5장으로 뽑기 동작을 시연합니다.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-main" id="read" type="button">리딩 확인 →</button><button class="smallbtn" id="sample" type="button">검증 사례 체험</button></div><div aria-live="polite" class="result glass panel" id="tarotResult"><div class="mini" id="readingMeta"></div><p id="readingText"></p><button class="smallbtn" id="copyReading" type="button">리딩 복사</button></div></div></section>
 
+<!-- CUSTOMER LEDGER: 고객 안내 전용, 관리자 데이터 비공개 -->
+<section class="section area" id="customerLedger"><div class="wrap"><div class="kicker">CUSTOMER LEDGER</div><h2>고객 장부</h2><div class="glass panel"><p>관리자가 결제를 확인 후 룰렛 이용권이 지급됩니다.</p><p>결제 내역, 룰렛 이용권, 상담 횟수, 획득 포인트 등은 장부에서 확인 가능합니다.</p><p>개인정보와 상담 내용에 대한 기록은 남기지 않습니다.</p><p class="note">현재 고객별 장부 조회 기능은 연결되지 않았습니다. 실제 내역 확인은 관리자에게 문의해 주세요.</p></div></div></section>
 <!-- SECTION: LEDGER | 고객 장부 관리자/미리보기 -->
 <section class="section area" id="ledger"><div class="wrap"><div class="kicker">PRIVATE LEDGER · DEMO</div><h2>고객 장부 관리</h2><p class="muted">고객 이름과 금액으로 룰렛 지급 대기를 등록하고, 관리자 확정 시 선결제 잔액과 룰렛 이용권을 함께 기록합니다. 상담 이용 금액만 입력하면 잔액이 자동 계산됩니다. 기록과 룰렛 결과는 현재 브라우저에만 보관되며 실제 고객에게 공유되지 않습니다. 관리자/고객 탭은 시제품 미리보기이며 접근 권한을 보호하지 않습니다.</p><div class="glass panel"><div class="ledger-toolbar"><button class="tab on" id="adminTab" type="button">관리자 화면</button><button class="tab" id="clientTab" type="button">고객 열람 화면 미리보기</button></div><div id="adminPane"><h3>결제 확인 및 고객 장부 자동 등록</h3><div class="form-grid"><div><label class="field" for="ledgerName">고객 구분명</label><input class="input" id="ledgerName" maxlength="35" placeholder="예: 달빛님"/></div></div><button class="btn btn-main" id="createLedger" type="button">고객 장부 준비 (선택 사항)</button><div class="notice" style="margin-top:12px">포인트 혜택: 결제 확정 시 1만 원당 기본 1회, 10만 원당 보너스 1회 지급. 각 룰렛은 1만 원 기준 당첨 적립률만 적용. 10,000P로 편지형 상담 1건 교환 가능하며, 사용과 차감은 상담자 승인 후 처리합니다. 이 페이지의 룰렛·장부는 같은 브라우저에서만 동작하는 시제품입니다.</div><div class="divider"></div><h3>발급한 장부</h3><label class="field" for="ledgerSelect">관리할 장부 선택</label><select id="ledgerSelect"><option value="">장부를 먼저 발급해 주세요</option></select><div hidden="" id="ledgerEditor"><div class="ledger-stats" id="adminStats"></div><!-- SECTION: POINT-ADMIN | 룰렛 이용권 발급 및 관리자 포인트 차감 -->
 <div class="point-controls"><h3>포인트 · 룰렛 관리 (시제품)</h3><label class="field" for="spinPayment">이번 결제 확인 금액 (원)</label><input class="input" type="number" min="10000" step="1000" id="spinPayment" value="40000"/><div class="ledger-toolbar"><button type="button" class="smallbtn" id="queueSpin">룰렛 지급 대기 등록</button><button type="button" class="smallbtn" id="issueSpin">결제 확정 · 대기 룰렛 지급</button><button type="button" class="smallbtn" id="redeemPoints">10,000P 차감 · 편지 상담 1건 승인</button></div><p class="note">결제 건별로 1만 원당 1회 + 10만 원당 보너스 1회입니다. 고객에게는 룰렛 지급 대기 상태만 표시됩니다. 쿠폰 수령·등록 확인 과정은 관리자 내부에서 처리합니다. 실제 결제 검증은 서버에 연결되지 않았습니다.</p><div id="pointAdminStatus" class="notice" role="status" aria-live="polite"></div><div id="pointGlobalStats" class="note" style="margin-top:10px"></div></div><div class="form-grid"><div><label class="field" for="ledgerAction">장부 기록 유형</label><select id="ledgerAction"><option value="charge">상담 이용 금액 차감</option><option value="memo">공유 메모 추가</option></select></div><div><label class="field" for="ledgerAmount">사용 금액 (원)</label><input class="input" id="ledgerAmount" min="0" step="1" type="number" value="10000"/></div></div><label class="field" for="ledgerNote">기록 메모 (선택)</label><input class="input" id="ledgerNote" maxlength="120" placeholder="예: 10월 12일 상담 정산"/><div class="ledger-toolbar"><button class="btn btn-main" id="addLedgerRecord" type="button">기록 추가</button><button class="smallbtn" id="toggleLedger" type="button">장부 종료</button><button class="smallbtn" id="previewLedger" type="button">고객 화면 보기</button></div><div class="notice" id="ledgerStatus" style="margin-top:18px"></div><h3>기록 이력</h3><div id="adminHistory"></div></div></div><div hidden="" id="clientPane"><div class="mini">CUSTOMER VIEW · PREVIEW</div><h3 id="clientTitle">고객 장부 미리보기</h3><!-- SECTION: POINT-WHEEL | 고객 룰렛 체험 및 포인트 장부 -->
@@ -867,7 +881,7 @@ function openConsultScreen(mode){
   $('letterScreen').hidden=mode!=='letter';
   $('allPricesScreen').hidden=mode!=='all';
   $('allPricesOpen').hidden=Boolean(mode);
-  $('consultCommonNotice').hidden=!mode;
+  $('consultCommonNotice').hidden=true;
   $('consultPrototypeNote').hidden=!mode;
   // Keep the order card hidden until a price is explicitly selected.
   $('inlineOrder').hidden=true;
@@ -951,9 +965,16 @@ function updateOrder(){
  if(!realtime)orderWritten.checked=false;
  const total=order.base*(realtime&&orderWritten.checked?2:1);
  const item=realtime?rateLabels[order.band]+' / '+order.duration:'비실시간 '+(order.reading||'3장 타로')+' / '+order.count+'건';
- $('orderSelection').textContent=item+'\n기본 상담료 '+formatWon(order.base);
- $('orderTotal').hidden=!(realtime&&orderWritten.checked);
- $('orderTotal').textContent='총 결제 금액: '+formatWon(total);
+ $('orderSelection').textContent='';
+ const details=document.createElement('div');details.className='order-price-details';
+ const itemText=document.createElement('span');itemText.textContent=item;
+ const baseText=document.createElement('span');baseText.textContent='기본 상담료 '+formatWon(order.base);
+ details.append(itemText,baseText);
+ const totalLine=document.createElement('div');totalLine.className='order-price-total';
+ const totalLabel=document.createElement('span');totalLabel.textContent='총 결제 금액';
+ const totalValue=document.createElement('strong');totalValue.textContent=formatWon(total);
+ totalLine.append(totalLabel,totalValue);
+ $('orderSelection').append(details,totalLine);
  const complete=Boolean(orderPayment.value)&&(!realtime||(Boolean(orderMethod.value)&&Boolean(rateDate.value)&&Boolean(rateTime.value.trim())&&Boolean(previewBand)));
  $('orderFinal').hidden=!complete;
  
@@ -1282,7 +1303,7 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
 /* 모바일: 홈/상담가격/무료타로/이용안내/장부는 각각 독립된 화면. PC는 원래 스크롤형. */
 (function(){
  const mq=window.matchMedia('(max-width:720px)');
- const views=['home','prices','tarot','about','ledger'];
+ const views=['home','prices','tarot','about','customerLedger','ledger'];
  const body=document.body;
  const scrollHint=document.getElementById('mobileScrollHint');
  let hintFrame=0;
