@@ -598,6 +598,25 @@ body.consult-holiday-date-blocked #prices #realtimeDurationStep {
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="In-between Shift"/>
+<style id="ibsAdminVisibilityGuard">
+/* 일반 방문자 화면과 관리자 전용 화면을 분리합니다. */
+#sourceToc,#reservationAdmin,#ledger,#siteNav a[href="#ledger"]{display:none!important}
+html.ibs-admin-entry #reservationAdmin{display:block!important}
+html.ibs-admin-entry.ibs-admin-authenticated #sourceToc{display:block!important}
+html.ibs-admin-entry.ibs-admin-authenticated #ledger{display:block!important}
+html.ibs-admin-entry.ibs-admin-authenticated #siteNav a[href="#ledger"]{display:block!important}
+/* 모바일 개별 화면의 기존 표시 규칙보다 관리자 진입 규칙을 우선합니다. */
+@media(max-width:800px){
+ html.ibs-admin-entry.ibs-admin-authenticated body.mobile-page-mode[data-mobile-view="ledger"] #ledger{display:block!important}
+ html.ibs-admin-entry.ibs-admin-authenticated body.mobile-page-mode:not([data-mobile-view="ledger"]) #ledger{display:none!important}
+}
+</style>
+<script id="ibsAdminEntryGuard">
+/* 관리자 진입: 사이트주소/?admin=1  (고객에게 이 주소를 공유하지 마세요) */
+if(new URLSearchParams(location.search).get('admin')==='1'){
+ document.documentElement.classList.add('ibs-admin-entry');
+}
+</script>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
@@ -1459,7 +1478,7 @@ $r('orderGo').addEventListener('click',e=>{if(!intakeAllowed($r('realtimeScreen'
 [dateInput,timeInput].forEach(el=>['change','input'].forEach(ev=>el.addEventListener(ev,()=>{const current=document.querySelector('.realtime-duration-button.chosen');if(current){current.classList.remove('chosen');current.setAttribute('aria-pressed','false');}render()})));
 document.querySelectorAll('[data-duration-select]').forEach(el=>el.addEventListener('click',()=>queueMicrotask(render)));
 onSnapshot(reservations,snap=>{blocks=snap.docs.map(d=>({id:d.id,...d.data()})).filter(b=>typeof b.date==='string'&&Number.isFinite(b.startMinute)&&Number.isFinite(b.endMinute));loaded=true;liveError=false;render()},err=>{liveError=true;loaded=false;render();$r('raStatus').textContent='Firestore 연결 오류: '+err.message});
-onAuthStateChanged(auth,user=>{currentUser=user;$r('raLogin').hidden=!!user;$r('raManage').hidden=!user;$r('raUser').textContent=user?'로그인: '+user.email:'';renderAdminList()});
+onAuthStateChanged(auth,user=>{currentUser=user;document.documentElement.classList.toggle('ibs-admin-authenticated',!!user);$r('raLogin').hidden=!!user;$r('raManage').hidden=!user;$r('raUser').textContent=user?'로그인: '+user.email:'';renderAdminList()});
 $r('raSignIn').addEventListener('click',async()=>{try{await signInWithEmailAndPassword(auth,$r('raEmail').value.trim(),$r('raPassword').value);$r('raPassword').value='';$r('raStatus').textContent='로그인했습니다.'}catch(e){$r('raStatus').textContent='로그인 실패: '+e.message}});
 $r('raSignOut').addEventListener('click',()=>signOut(auth));
 $r('raAdd').addEventListener('click',async()=>{const date=$r('raDate').value,start=$r('raStart').value.trim(),end=$r('raEnd').value.trim(),sm=minutes(start),em=minutes(end);if(!date||!Number.isFinite(sm)||!Number.isFinite(em)||sm>=em){$r('raStatus').textContent='날짜와 시작·종료 시간을 올바르게 입력해 주세요.';return}if(overlap(date,sm,em)){$r('raStatus').textContent='기존 예약과 겹칩니다.';return}try{await addDoc(reservations,{date,start,end,startMinute:sm,endMinute:em,createdAt:serverTimestamp()});$r('raStatus').textContent='예약 시간을 등록했습니다.'}catch(e){$r('raStatus').textContent='등록 실패: '+e.message}});
