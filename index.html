@@ -613,7 +613,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
  document.documentElement.classList.add('ibs-admin-entry');
 }
 </script>
-<style>body.guide-modal-open #writtenGuideOpen,body.guide-modal-open #writtenGuideOpen:hover,body.guide-modal-open #writtenGuideOpen:focus,body.guide-modal-open #writtenGuideOpen:active{box-shadow:none!important;filter:none!important;outline:none!important;transform:none!important}</style></head><body>
+<style>body.guide-modal-open #prices .guide-link,body.guide-modal-open #prices .guide-link:hover,body.guide-modal-open #prices .guide-link:focus,body.guide-modal-open #prices .guide-link:active{box-shadow:none!important;filter:none!important;outline:none!important;transform:none!important}body.guide-modal-open #prices .consult-progress-box.progress-current,body.guide-modal-open #prices #ratePicker:has(.progress-current),body.guide-modal-open #prices #inlineOrder:has(#paymentStep.progress-current){animation-play-state:paused!important;box-shadow:none!important}</style></head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
 <div class="mobile-scroll-hint" id="mobileScrollHint" aria-hidden="true"><span class="more-triangle"><span class="more-label">MORE</span></span></div>
@@ -1343,12 +1343,12 @@ if(!currentLedger())$('pointAdminStatus').textContent='고객을 선택한 뒤 �
   if(go)go.disabled=go.disabled||!finalCheck.checked;
   hint.hidden=false;
  }
- function openGuide(e){if(e)e.preventDefault();refresh();body.innerHTML='';
+ function openGuide(e){if(e){e.preventDefault();if(e.currentTarget&&e.currentTarget.blur)e.currentTarget.blur();}refresh();body.innerHTML='';
   const source=document.querySelector('#about .guide-master-panel');if(!source){hint.textContent='이용 안내를 불러오지 못했습니다.';return;}const clone=source.cloneNode(true);
   clone.querySelectorAll('.guide-group').forEach(g=>{if(g.id && g.id!==(guideMode==='realtime'?'aboutRealtime':'aboutLetter'))g.remove()});
   body.appendChild(clone);modal.hidden=false;document.body.classList.add('guide-modal-open');confirm.focus();
  }
- function closeGuide(){modal.hidden=true;document.body.classList.remove('guide-modal-open');refresh();}
+ function closeGuide(){if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();modal.hidden=true;document.body.classList.remove('guide-modal-open');refresh();}
  openBtn.addEventListener('click',openGuide);
  document.querySelectorAll('[data-guide-open]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();openGuide(e)},true));
  confirm.addEventListener('click',()=>{const checkbox=document.getElementById(guideMode==='realtime'?'realtimeAgreement':'letterAgreement');checkbox.checked=true;checkbox.dispatchEvent(new Event('change',{bubbles:true}));closeGuide();go.focus({preventScroll:true});});
