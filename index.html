@@ -590,6 +590,14 @@ body.consult-holiday-date-blocked #prices #realtimeDurationStep {
  border-color:#49434d!important;box-shadow:none!important;animation:none!important;
 }
 </style>
+
+<!-- PWA: 홈 화면 설치 -->
+<link rel="manifest" href="./manifest.webmanifest"/>
+<link rel="icon" type="image/png" sizes="192x192" href="./in_between_shift_icon_192.png"/>
+<link rel="apple-touch-icon" href="./in_between_shift_icon_192.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="In-between Shift"/>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
@@ -1905,4 +1913,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #siteStatus .ss-alert {padding:9px 4px !important}
 }
 </style>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('PWA service worker:', err));
+  });
+}
+</script>
 </body></html>
