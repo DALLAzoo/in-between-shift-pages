@@ -577,14 +577,10 @@ body.consult-reservation-unavailable #prices #realtimeDurationStep.progress-curr
 </style>
 
 <style id="date-time-glow-independent-fix">
+/* 단계별 강조는 syncConsultProgress의 progress-current 한 곳에서만 결정합니다.
+   이전 날짜·시간 입력값이 남아 있어도 완료된 박스를 다시 빛나게 하지 않습니다. */
 #prices #reservationAvailability{white-space:pre-line!important;}
-/* 2번 날짜·시간의 바깥 박스는 상담 방식 변경 후에도 강조를 유지 */
-body.consult-date-time-entered #prices #ratePicker {
- border-color:#d8f56d!important;
- box-shadow:0 0 0 1px #d8f56d,0 0 12px #d8f56d75,0 0 24px #c5ef5738!important;
- animation:none!important;
-}
-/* 3번 상담 시간 선택은 예약 불가 상태에서만 빛을 끈다 */
+/* 예약 불가·휴무일에는 상담 시간 선택 단계의 강조를 표시하지 않습니다. */
 body.consult-reservation-unavailable #prices #realtimeDurationStep,
 body.consult-holiday-date-blocked #prices #realtimeDurationStep {
  border-color:#49434d!important;box-shadow:none!important;animation:none!important;
@@ -969,7 +965,7 @@ function syncConsultProgress(){
  const reservationUnavailable=Boolean(realtime&&(availabilityState==='blocked'||availabilityState==='error'||noAvailableDuration));
  document.body.classList.toggle('consult-reservation-unavailable',reservationUnavailable);
  // 날짜·시간 선택 박스의 강조는 상담 방식 변경 및 예약 불가 상태와 독립적으로 유지
- document.body.classList.toggle('consult-date-time-entered',Boolean(realtime&&rateDate.value&&rateTime.value.trim()));
+ document.body.classList.toggle('consult-date-time-entered',Boolean(realtime&&method&&datetime));
  if(reservationUnavailable){const box=$('realtimeDurationStep');if(box)box.classList.remove('progress-current','progress-done');}
  const blockedHoliday=typeof window.tarotHolidayDateBlocked==='function'&&window.tarotHolidayDateBlocked(rateDate.value);
  document.body.classList.toggle('consult-holiday-date-blocked',Boolean(realtime&&blockedHoliday));
