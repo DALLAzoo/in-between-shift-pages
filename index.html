@@ -659,6 +659,20 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 #customerLedger .panel p{line-height:1.8}
 @media(max-width:380px){#prices .order-price-details{flex-wrap:wrap}#prices .order-price-details span:last-child{margin-left:auto}}
 </style>
+<style>
+/* GUIDE MENU ATTENTION: only the small pink rays blink, not the menu button. */
+.mobile-menu-toggle{position:relative}
+.guide-menu-rays{position:absolute;right:-11px;top:-12px;width:34px;height:30px;pointer-events:none;display:none}
+.guide-menu-rays i{position:absolute;display:block;width:5px;height:13px;border-radius:9px;background:#ff4fd8;box-shadow:0 0 7px #ff4fd899;opacity:0;animation:guideRayBlink 2.7s ease-in-out infinite}
+.guide-menu-rays i:nth-child(1){left:5px;top:2px;transform:rotate(-22deg)}
+.guide-menu-rays i:nth-child(2){left:18px;top:1px;transform:rotate(28deg)}
+.guide-menu-rays i:nth-child(3){left:27px;top:15px;height:11px;transform:rotate(73deg)}
+@keyframes guideRayBlink{0%,15%,42%,100%{opacity:0}20%,32%{opacity:1}}
+.guide-more-note{text-align:center;margin:24px 0 12px;color:#e8d5e3;font-size:13px;line-height:1.8}
+.guide-more-note strong{color:#ff80e2}
+@media(max-width:720px){body.mobile-page-mode[data-mobile-view="about"]:not(.guide-menu-used) .mobile-menu-toggle[aria-expanded="false"] .guide-menu-rays{display:block}}
+@media(prefers-reduced-motion:reduce){.guide-menu-rays i{animation:none;opacity:1}}
+</style>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
@@ -668,7 +682,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 
 <!-- SECTION: TOC-UI | 화면 내 수정 목차 -->
 <details id="sourceToc" style="position:relative;z-index:31;margin:8px auto;max-width:1060px;padding:10px 16px;border:1px solid #ffffff33;border-radius:12px;color:#f7f2f6;background:#29252e;font-size:12px"><summary style="cursor:pointer;font-weight:700">🛠 HTML 수정 목차 · 소스 줄 번호</summary><p style="opacity:.75">줄 번호는 HTML 파일 원본 기준입니다. 수정 후 함께 제공한 build_tarot_toc.py를 실행하면 갱신됩니다. 웹서버에서 열면 줄 번호를 자동으로 확인합니다.</p><ol id="sourceTocList"></ol></details>
-<header class="header"><div class="wrap header-in"><a class="logo" href="#home">In-between <i>Shift ✦</i></a><button class="mobile-menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="siteNav"><span></span><span></span><span></span></button><nav class="nav" id="siteNav" hidden><a href="#prices">상담 가격에서 선택하기 ↗</a><a href="#tarot">무료 1장 타로</a><a href="#about">이용 안내</a><a href="#customerLedger">고객 장부</a><a href="#ledger">관리자 장부</a></nav></div></header>
+<header class="header"><div class="wrap header-in"><a class="logo" href="#home">In-between <i>Shift ✦</i></a><button class="mobile-menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="siteNav"><span></span><span></span><span></span><span class="guide-menu-rays" aria-hidden="true"><i></i><i></i><i></i></span></button><nav class="nav" id="siteNav" hidden><a href="#prices">상담 가격에서 선택하기 ↗</a><a href="#tarot">무료 1장 타로</a><a href="#about">이용 안내</a><a href="#customerLedger">고객 장부</a><a href="#ledger">관리자 장부</a></nav></div></header>
 
 
 <!-- SECTION: HERO | 첫 화면과 대표 이미지 -->
@@ -770,7 +784,7 @@ if(new URLSearchParams(location.search).get('admin')==='1'){
 <div class="guide-subgroup"><span class="guide-heading">02 · 요금 및 시간</span><p><b>요금 기준:</b> 상담 시작 시각과 날짜 기준 요금 선택</p><p><b>시간대 변경:</b> 상담 중 요금 시간대가 바뀌면 실제 상담 시간대에 따라 최종 요금 조정 가능</p><p><b>휴일 요금:</b> 주말·등록된 공휴일 반영 · 임시공휴일은 별도 확인 필요</p></div>
 <div class="guide-subgroup"><span class="guide-heading">03 · 리딩 내용 정리</span><p><b>선택 사항:</b> 채팅·보이스톡 모두 신청 가능 · 기본 상담료 100% 추가</p><p><b>정리 범위:</b> 상담 시간에 진행한 리딩의 질문별 핵심 결과와 해석 근거</p><p><b>제외 사항:</b> 전체 대화 기록 · 새로운 질문</p><p><b>상담 연장:</b> 연장 상담 및 연장분 서면 정리는 별도 선택·결제</p></div></div>
 </div><p class="note">현재 사이트는 시제품이며, 결제 확정 및 상담 접수는 운영자 확인 후 진행됩니다. 온라인 자동 결제·고객별 공유 장부 서버는 연결되지 않았습니다.</p>
-<a class="guide-return-link" id="guideReturn" href="#prices" hidden>← 상담 신청 화면으로 돌아가기</a></div></section>
+<p class="guide-more-note">다른 메뉴로 이동하려면 상단의 <strong>더보기 메뉴</strong>를 눌러주세요.</p><a class="guide-return-link" id="guideReturn" href="#prices" hidden>← 상담 신청 화면으로 돌아가기</a></div></section>
 </main><footer class="footer"><div class="wrap"><b>In-between Shift</b> · TAROT STUDIO<br/>당신의 이야기를 현실의 언어로.<br/>Prototype 0.4 · AI API 미사용 · 결제·고객 공유 서버 미연결</div></footer>
 
 <!-- SECTION: SCRIPT | 상담 선택/복사/장부 작동 코드 -->
@@ -2125,4 +2139,12 @@ if ('serviceWorker' in navigator) {
  select.addEventListener('change',sync);
  sync();
 })();
-</script></body></html>
+</script><script>
+(function(){
+  const menu=document.querySelector('.mobile-menu-toggle');
+  if(!menu)return;
+  menu.addEventListener('click',function(){document.body.classList.add('guide-menu-used');});
+  document.querySelectorAll('#siteNav a').forEach(function(a){a.addEventListener('click',function(){document.body.classList.remove('guide-menu-used');});});
+})();
+</script>
+</body></html>
