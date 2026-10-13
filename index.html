@@ -810,6 +810,7 @@ function syncRealtimeMethodButtons(){document.querySelectorAll('[data-realtime-m
 document.querySelectorAll('[data-realtime-method]').forEach(btn=>btn.addEventListener('click',()=>{orderMethod.value=btn.dataset.realtimeMethod;syncRealtimeMethodButtons();updateOrder()}));
 // SECTION: CONSULT-PROGRESS-DATE-TIME-SCROLL | 상담 방식 → 날짜 → 시작 시간 → 상담 시간으로 화면 이동
 function scrollToConsultStep(id){
+ if(id==='realtimeDurationStep' && (document.getElementById('reservationAvailability')?.dataset.state!=='free' || (typeof window.tarotHolidayDateBlocked==='function'&&window.tarotHolidayDateBlocked(rateDate.value))))return;
  if($('realtimeScreen').hidden||window.innerWidth>760)return;
  requestAnimationFrame(()=>{const target=$(id);if(!target||$('realtimeScreen').hidden)return;
  const r=target.getBoundingClientRect(),top=105,bottom=window.innerHeight-85;
@@ -900,7 +901,7 @@ function syncConsultProgress(){
  const screen=$('realtimeScreen');const letter=$('letterScreen');
  const realtime=!screen.hidden, nonRealtime=!letter.hidden;
  const method=Boolean($('orderMethod').value);
- const datetime=Boolean(rateDate.value&&rateTime.value.trim()&&previewBand&&!(typeof holidayDateBlocked==='function'&&holidayDateBlocked(rateDate.value))&&!(typeof indicator!=='undefined'&&['blocked','error','loading'].includes(indicator.dataset.state)));
+ const datetime=Boolean(rateDate.value&&rateTime.value.trim()&&previewBand&&!(typeof window.tarotHolidayDateBlocked==='function'&&window.tarotHolidayDateBlocked(rateDate.value))&&!(typeof indicator!=='undefined'&&['blocked','error','loading'].includes(indicator.dataset.state)));
  const duration=Boolean(order&&order.type==='realtime');
  const packageSelected=Boolean(order&&order.type==='letter');
  const payment=Boolean($('orderPayment').value);
@@ -926,7 +927,7 @@ function syncConsultProgress(){
  // 날짜·시간 선택 박스의 강조는 상담 방식 변경 및 예약 불가 상태와 독립적으로 유지
  document.body.classList.toggle('consult-date-time-entered',Boolean(realtime&&rateDate.value&&rateTime.value.trim()));
  if(reservationUnavailable){const box=$('realtimeDurationStep');if(box)box.classList.remove('progress-current','progress-done');}
- const blockedHoliday=typeof holidayDateBlocked==='function'&&holidayDateBlocked(rateDate.value);
+ const blockedHoliday=typeof window.tarotHolidayDateBlocked==='function'&&window.tarotHolidayDateBlocked(rateDate.value);
  document.body.classList.toggle('consult-holiday-date-blocked',Boolean(realtime&&blockedHoliday));
  if(blockedHoliday){
   const durationBox=$('realtimeDurationStep');
@@ -949,7 +950,7 @@ function guideToDurationAfterDatetime(){
  const ready=Boolean(rateDate.value && rateTime.value.trim() && previewBand);
  const newlyReady=ready && !datetimeWasReady;
  datetimeWasReady=ready;
- if(!newlyReady || $('realtimeScreen').hidden || window.innerWidth>760)return;
+ if(!newlyReady || $('realtimeScreen').hidden || window.innerWidth>760 || (typeof window.tarotHolidayDateBlocked==='function'&&window.tarotHolidayDateBlocked(rateDate.value)) || $('reservationAvailability')?.dataset.state!=='free')return;
  requestAnimationFrame(()=>requestAnimationFrame(()=>{
   if($('realtimeScreen').hidden)return;
   const next=$('realtimeDurationStep');
@@ -1320,6 +1321,7 @@ const koreaDay=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'
 const koreaHour=()=>Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',hourCycle:'h23'}).format(new Date()));
 function holidayActive(date=koreaDay()){return !!(siteSettings.holidayEnabled&&siteSettings.holidayStart&&siteSettings.holidayEnd&&date>=siteSettings.holidayStart&&date<=siteSettings.holidayEnd)}
 function holidayDateBlocked(date){return !!date&&holidayActive(date)}
+window.tarotHolidayDateBlocked=holidayDateBlocked;
 function intakeAllowed(type){if(!settingsReady||settingsError)return false;return type==='realtime'?siteSettings.normalLive:siteSettings.normalLetter}
 function renderSiteStatus(){const holiday=holidayActive(),ready=settingsReady&&!settingsError;
  const today=koreaDay(), scheduled=!!(siteSettings.holidayEnabled&&siteSettings.holidayStart&&siteSettings.holidayEnd&&today<siteSettings.holidayStart);
@@ -1366,7 +1368,15 @@ function minutes(t){const m=/^(\d{1,2}):(\d{2})$/.exec(t||'');if(!m)return NaN;c
 function selectedInterval(){const start=minutes(timeInput.value.trim());const selected=document.querySelector('.realtime-duration-button.chosen');const duration=selected?.dataset.durationSelect==='1시간'?60:10;return {date:dateInput.value,start,end:start+duration,duration}}
 function overlap(date,start,end){return blocks.some(b=>b.date===date&&start<b.endMinute&&end>b.startMinute)}
 function isFree(){const x=selectedInterval();return intakeAllowed('realtime')&&!holidayDateBlocked(x.date)&&loaded&&!liveError&&!!x.date&&Number.isFinite(x.start)&&x.start<1440&&x.end<=1440&&!overlap(x.date,x.start,x.end)}
-function render(){const x=selectedInterval();let message,state;
+function render(){
+ const holiday=holidayDateBlocked(dateInput.value);
+ // 휴무일에는 고객의 시작 시간 입력 자체를 차단하고 기존 입력도 초기화합니다.
+ if(holiday&&timeInput.value){timeInput.value='';timeInput.dispatchEvent(new Event('input',{bubbles:true}));}
+ timeInput.disabled=holiday;
+ timeInput.setAttribute('aria-disabled',String(holiday));
+ if(holiday){timeInput.placeholder='휴무일에는 시간 선택 불가';}
+ else{timeInput.placeholder='예: 23:36';}
+ const x=selectedInterval();let message,state;
 if(!intakeAllowed('realtime')){message='현재 실시간 예약을 받지 않습니다.';state='blocked'}
 else if(holidayDateBlocked(x.date)){message='휴무 종료 이후 날짜를 선택해 주세요.';state='blocked'}
 else if(liveError){message='예약 정보를 확인할 수 없어 신청을 잠시 제한합니다. 관리자에게 문의해 주세요.';state='error'}
