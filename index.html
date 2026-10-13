@@ -575,6 +575,21 @@ body.consult-reservation-unavailable #prices #realtimeDurationStep.progress-curr
 /* 안내 문장은 모바일에서 자연스럽게 여러 줄로 표시 */
 #prices #reservationAvailability{white-space:normal;overflow-wrap:break-word;word-break:keep-all;line-height:1.65;}
 </style>
+
+<style id="date-time-glow-independent-fix">
+#prices #reservationAvailability{white-space:pre-line!important;}
+/* 2번 날짜·시간의 바깥 박스는 상담 방식 변경 후에도 강조를 유지 */
+body.consult-date-time-entered #prices #ratePicker {
+ border-color:#d8f56d!important;
+ box-shadow:0 0 0 1px #d8f56d,0 0 12px #d8f56d75,0 0 24px #c5ef5738!important;
+ animation:none!important;
+}
+/* 3번 상담 시간 선택은 예약 불가 상태에서만 빛을 끈다 */
+body.consult-reservation-unavailable #prices #realtimeDurationStep,
+body.consult-holiday-date-blocked #prices #realtimeDurationStep {
+ border-color:#49434d!important;box-shadow:none!important;animation:none!important;
+}
+</style>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
@@ -908,6 +923,8 @@ function syncConsultProgress(){
  const noAvailableDuration=durationButtons.length>0&&durationButtons.every(button=>button.disabled);
  const reservationUnavailable=Boolean(realtime&&(availabilityState==='blocked'||availabilityState==='error'||noAvailableDuration));
  document.body.classList.toggle('consult-reservation-unavailable',reservationUnavailable);
+ // 날짜·시간 선택 박스의 강조는 상담 방식 변경 및 예약 불가 상태와 독립적으로 유지
+ document.body.classList.toggle('consult-date-time-entered',Boolean(realtime&&rateDate.value&&rateTime.value.trim()));
  if(reservationUnavailable){const box=$('realtimeDurationStep');if(box)box.classList.remove('progress-current','progress-done');}
  const blockedHoliday=typeof holidayDateBlocked==='function'&&holidayDateBlocked(rateDate.value);
  document.body.classList.toggle('consult-holiday-date-blocked',Boolean(realtime&&blockedHoliday));
@@ -1356,7 +1373,7 @@ else if(liveError){message='예약 정보를 확인할 수 없어 신청을 잠�
 else if(!loaded){message='예약 정보를 확인하는 중입니다.';state='loading'}
 else if(!x.date||!Number.isFinite(x.start)){message='날짜와 시작 시간을 입력하면 예약 가능 여부를 확인합니다.';state='idle'}
 else if(x.end>1440){message='자정을 넘는 상담은 별도 문의해 주세요.';state='blocked'}
-else if(overlap(x.date,x.start,x.end)){message='선택한 시간에 이미 예약이 있습니다. 다른 시간을 선택해 주세요.';state='blocked'}
+else if(overlap(x.date,x.start,x.end)){message='선택한 시간에 이미 예약이 있습니다.\n다른 시간을 선택해 주세요.';state='blocked'}
 else{message='예약 가능한 날짜와 시간대입니다.';state='free'}
 indicator.textContent=message;indicator.dataset.state=state;
 // 예약 가능 여부와 상담 시간 버튼의 활성 상태를 함께 갱신합니다.
