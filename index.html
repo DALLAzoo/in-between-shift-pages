@@ -1950,20 +1950,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 }
 </style>
 <style id="ssMobileStatusColumnFix20261013">
-/* 모바일에서 긴 실시간 상담 상태가 아래로 밀리지 않도록 공간 재배분 */
+/* 모바일: 글자 크기를 유지하면서 오른쪽 긴 상태 문구에 더 넓은 공간 배정 */
 @media(max-width:480px) {
   #siteStatus .ss-static-summary {grid-template-columns:minmax(0,1fr) 82px !important;column-gap:7px !important;}
-  #siteStatus .ss-status-card {grid-template-columns:minmax(0,32%) minmax(0,68%) !important;}
-  #siteStatus .ss-status-card .ss-badges {grid-template-columns:minmax(0,46%) minmax(0,54%) !important;gap:3px !important;}
-  #siteStatus .ss-status-card .ss-status-name {font-size:10px !important;letter-spacing:-.45px !important;}
-  #siteStatus .ss-status-card .ss-pill {font-size:9.5px !important;letter-spacing:-.55px !important;line-height:1.35 !important;overflow-wrap:normal !important;word-break:keep-all !important;}
+  #siteStatus .ss-status-card {grid-template-columns:minmax(0,31%) minmax(0,69%) !important;}
+  #siteStatus .ss-status-card .ss-badges {grid-template-columns:minmax(0,42%) minmax(0,58%) !important;gap:4px !important;}
+  #siteStatus .ss-status-card .ss-status-name {font-size:11px !important;letter-spacing:-.3px !important;}
+  #siteStatus .ss-status-card .ss-pill {font-size:11px !important;letter-spacing:-.35px !important;line-height:1.4 !important;overflow-wrap:normal !important;word-break:keep-all !important;}
   #siteStatus .ss-alert {min-height:96px !important;padding:8px 3px !important;}
 }
 @media(max-width:355px) {
   #siteStatus {padding-left:12px !important;padding-right:12px !important;}
   #siteStatus .ss-static-summary {grid-template-columns:minmax(0,1fr) 74px !important;column-gap:5px !important;}
   #siteStatus .ss-status-card {grid-template-columns:minmax(0,30%) minmax(0,70%) !important;}
-  #siteStatus .ss-status-card .ss-pill {font-size:9px !important;}
+  #siteStatus .ss-status-card .ss-pill {font-size:10.5px !important;}
 }
 </style>
 
