@@ -791,6 +791,23 @@ function refreshRatePreview(){
     document.querySelectorAll('.realtime-duration-button').forEach(b=>{b.classList.remove('chosen');b.setAttribute('aria-pressed','false')});
    }else{order.band=effective;order.base=rateTable[effective][order.duration==='1시간'?1:0];updateOrder()}}
 }
+// 시작 시간: 숫자 네 자리(예: 1300)를 입력하면 13:00으로 자동 변환합니다.
+rateTime.addEventListener('input', function(){
+  const raw = this.value;
+  const digits = raw.replace(/\D/g, '').slice(0, 4);
+  const formatted = digits.length > 2 ? digits.slice(0, 2) + ':' + digits.slice(2) : digits;
+  if (raw !== formatted) this.value = formatted;
+});
+rateTime.addEventListener('blur', function(){
+  const digits = this.value.replace(/\D/g, '');
+  if (digits.length === 3) {
+    const padded = digits.padStart(4, '0');
+    if (Number(padded.slice(0, 2)) <= 23 && Number(padded.slice(2)) <= 59) {
+      this.value = padded.slice(0, 2) + ':' + padded.slice(2);
+      this.dispatchEvent(new Event('change', {bubbles: true}));
+    }
+  }
+});
 rateDate.addEventListener('change',refreshRatePreview);rateTime.addEventListener('change',refreshRatePreview);rateTime.addEventListener('input',refreshRatePreview);
 // 페이지를 열어 둔 상태에서도 미입력 요금은 분 단위로 현재 시각을 따라갑니다.
 setInterval(()=>{if(!rateDate.value||!rateTime.value.trim())refreshRatePreview()},60000);
