@@ -593,9 +593,9 @@ body.consult-holiday-date-blocked #prices #realtimeDurationStep {
 </style>
 
 <!-- PWA: 홈 화면 설치 -->
-<link rel="manifest" href="./admin/manifest.webmanifest"/>
-<link rel="icon" type="image/png" sizes="192x192" href="./in_between_shift_icon_192.png"/>
-<link rel="apple-touch-icon" href="./in_between_shift_icon_192.png"/>
+<link rel="manifest" href="./manifest.webmanifest"/>
+<link rel="icon" type="image/png" sizes="192x192" href="../in_between_shift_icon_192.png"/>
+<link rel="apple-touch-icon" href="../in_between_shift_icon_192.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="In-between Shift"/>
@@ -1936,7 +1936,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./admin/sw.js').catch(err => console.warn('PWA service worker:', err));
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('PWA service worker:', err));
   });
 }
 </script>
