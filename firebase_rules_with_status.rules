@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /siteSettings/{settingId} {
+      allow read: if settingId == 'consultation';
+      allow write: if settingId == 'consultation'
+        && request.auth != null
+        && request.auth.uid == 'REPLACE_WITH_ADMIN_UID';
+    }
+    match /blockedReservations/{reservationId} {
+      // 공개된 예약 차단 시간만 읽을 수 있습니다.
+      allow read: if true;
+      // 아래 UID를 Firebase Authentication 관리자 계정의 UID로 교체하세요.
+      function isAdmin() {
+        return request.auth != null && request.auth.uid == 'REPLACE_WITH_ADMIN_UID';
+      }
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['date','start','end','startMinute','endMinute','createdAt'])
+        && request.resource.data.date is string
+        && request.resource.data.start is string
+        && request.resource.data.end is string
+        && request.resource.data.startMinute is int
+        && request.resource.data.endMinute is int
+        && request.resource.data.startMinute >= 0
+        && request.resource.data.endMinute <= 1440
+        && request.resource.data.startMinute < request.resource.data.endMinute;
+      allow delete: if isAdmin();
+      allow update: if false;
+    }
+  }
+}
