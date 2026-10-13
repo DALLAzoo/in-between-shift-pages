@@ -976,6 +976,23 @@ body.mobile-page-mode[data-mobile-view="about"] .mobile-menu-toggle::after{
   #siteStatus .ss-alert-row {padding-left:4px !important}
 }
 </style>
+<style id="ssStatusTextClippingFix20261014">
+/* Prevent Korean glyph descenders from being clipped during loading states.
+   Scope strictly to status labels; do not change the finalized grid. */
+#siteStatus .ss-status-card .ss-pill {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  line-height:1.55 !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  -webkit-line-clamp:unset !important;
+  padding-block:2px !important;
+}
+#siteStatus .ss-status-card .ss-badges {
+  overflow:visible !important;
+}
+</style>
 </head><body>
 
 <!-- SECTION: MOBILE-SCROLL-HINT | 추가 내용이 있을 때 우측 하단에 밝게 점멸하는 형광 MORE 삼각형 -->
